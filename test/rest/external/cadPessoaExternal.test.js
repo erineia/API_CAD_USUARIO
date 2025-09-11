@@ -33,14 +33,18 @@ describe('Cad Pessoa - External', () => {
   });
 
   it('external: deve cadastrar pessoa com sucesso retornando 201', async () => {
+    const cpfUnico = String(
+      Math.floor(10000000000 + Math.random() * 89999999999),
+    );
+    const pessoaNova = { ...postCadPessoa, cpf: cpfUnico };
     const resposta = await request(process.env.BASE_URL_REST)
       .post('/pessoas')
       .set('Authorization', `Bearer ${token}`)
-      .send(postCadPessoa);
+      .send(pessoaNova);
 
     expect(resposta.status).to.equal(201);
     expect(resposta.body.message).to.equal(mensagens.MSG_SUCESSO);
-    expect(resposta.body.pessoa.cpf).to.equal(postCadPessoa.cpf);
+    expect(resposta.body.pessoa.cpf).to.equal(cpfUnico);
   });
 
   it('external: deve validar CPF já cadastrado retornando 400', async () => {
