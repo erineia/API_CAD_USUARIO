@@ -13,7 +13,7 @@ function validatePessoa(data) {
     return {
       valid: false,
       message:
-        'Nome e CPF são obrigatórios. Nome não pode ser "string" ou vazio. CPF deve ser numérico, 11 dígitos e não pode ser "string".',
+        'Nome e CPF são obrigatórios. CPF deve ser numérico, 11 dígitos, o valor "string", é invalido',
     };
   }
   if (pessoas.find((p) => p.cpf === data.cpf)) {
@@ -33,13 +33,7 @@ function getAllPessoas() {
   return pessoas;
 }
 
-function getPessoaByCpf(cpf) {
-  const pessoa = pessoas.find((p) => p.cpf === cpf);
-  return pessoa || null;
-}
-
 module.exports = {
   registerPessoa,
   getAllPessoas,
-  getPessoaByCpf,
 };

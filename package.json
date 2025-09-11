@@ -4,7 +4,8 @@
   "description": "API RESTful para gerenciamento de usuários (Express, JWT, Swagger)",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test-rest-controller": "mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -19,5 +20,8 @@
     "supertest": "^7.1.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3"
+  },
+  "devDependencies": {
+    "mochawesome": "^7.1.3"
   }
 }

@@ -1,0 +1,157 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 3,
+    "passes": 3,
+    "pending": 0,
+    "failures": 0,
+    "start": "2025-09-11T18:13:13.682Z",
+    "end": "2025-09-11T18:13:13.824Z",
+    "duration": 142,
+    "testsRegistered": 3,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "722c0d46-71da-4073-a763-74483170ec82",
+      "title": "",
+      "fullFile": "C:\\Users\\erine\\Documents\\Pos-Graduação\\Trabalho-Final-Modulo7\\test\\rest\\controller\\cadPessoaController.test.js",
+      "file": "\\test\\rest\\controller\\cadPessoaController.test.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "a0eaaca1-d173-4e3f-9ab5-ca7591458b00",
+          "title": "Cad Pessoa - Controller",
+          "fullFile": "C:\\Users\\erine\\Documents\\Pos-Graduação\\Trabalho-Final-Modulo7\\test\\rest\\controller\\cadPessoaController.test.js",
+          "file": "\\test\\rest\\controller\\cadPessoaController.test.js",
+          "beforeHooks": [
+            {
+              "title": "\"before all\" hook in \"Cad Pessoa - Controller\"",
+              "fullTitle": "Cad Pessoa - Controller \"before all\" hook in \"Cad Pessoa - Controller\"",
+              "timedOut": false,
+              "duration": 112,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "await request(app).post('/users').send(usuario);\nconst res = await request(app).post('/login').send(usuario);\ntoken = res.body.token || res.body.token;",
+              "err": {},
+              "uuid": "ec5f01ea-18b7-4209-af30-5cf1f46c8ea2",
+              "parentUUID": "a0eaaca1-d173-4e3f-9ab5-ca7591458b00",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "deve retornar erro para nome/CPF inválidos",
+              "fullTitle": "Cad Pessoa - Controller deve retornar erro para nome/CPF inválidos",
+              "timedOut": false,
+              "duration": 9,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const pessoaInvalida = { ...postCadPessoa, nome: 'string', cpf: 'string' };\nconst res = await request(app)\n  .post('/pessoas')\n  .set('Authorization', `Bearer ${token}`)\n  .send(pessoaInvalida);\nexpect(res.status).to.equal(400);\nexpect(res.body.mensagemUsuario).to.equal(\n  'Nome e CPF são obrigatórios. CPF deve ser numérico, 11 dígitos, o valor \"string\", é invalido',\n);",
+              "err": {},
+              "uuid": "0379872c-e1af-492c-b8e4-0fc3e97fa4b8",
+              "parentUUID": "a0eaaca1-d173-4e3f-9ab5-ca7591458b00",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "deve cadastrar pessoa com sucesso",
+              "fullTitle": "Cad Pessoa - Controller deve cadastrar pessoa com sucesso",
+              "timedOut": false,
+              "duration": 6,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const res = await request(app)\n  .post('/pessoas')\n  .set('Authorization', `Bearer ${token}`)\n  .send(postCadPessoa);\nexpect(res.status).to.equal(201);\nexpect(res.body.message).to.equal('Pessoa cadastrada com sucesso');\nexpect(res.body.pessoa.cpf).to.equal(postCadPessoa.cpf);",
+              "err": {},
+              "uuid": "9c628a0a-9bdc-43ba-8f87-386ff79d21b1",
+              "parentUUID": "a0eaaca1-d173-4e3f-9ab5-ca7591458b00",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "deve retornar erro de CPF já cadastrado",
+              "fullTitle": "Cad Pessoa - Controller deve retornar erro de CPF já cadastrado",
+              "timedOut": false,
+              "duration": 7,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const res = await request(app)\n  .post('/pessoas')\n  .set('Authorization', `Bearer ${token}`)\n  .send(postCadPessoa);\nexpect(res.status).to.equal(400);\nexpect(res.body.mensagemUsuario).to.equal('CPF já cadastrado.');",
+              "err": {},
+              "uuid": "bde373a3-0361-4efc-81b0-4584564a331e",
+              "parentUUID": "a0eaaca1-d173-4e3f-9ab5-ca7591458b00",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "0379872c-e1af-492c-b8e4-0fc3e97fa4b8",
+            "9c628a0a-9bdc-43ba-8f87-386ff79d21b1",
+            "bde373a3-0361-4efc-81b0-4584564a331e"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 22,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 10000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 10000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.7.2"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": null,
+      "version": "6.2.0"
+    }
+  }
+}

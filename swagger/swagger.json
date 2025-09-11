@@ -82,24 +82,13 @@
           "201": { "description": "Pessoa cadastrada" },
           "400": { "description": "Erro de validação" }
         }
-      }
-    },
-    "/pessoas/{cpf}": {
+      },
       "get": {
-        "summary": "Consulta pessoa por CPF (protegido)",
+        "summary": "Consultar pessoas",
         "tags": ["Pessoas"],
         "security": [{ "bearerAuth": [] }],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "cpf",
-            "required": true,
-            "schema": { "type": "string" }
-          }
-        ],
         "responses": {
-          "200": { "description": "Dados da pessoa" },
-          "404": { "description": "Pessoa não encontrada" },
+          "200": { "description": "Lista de pessoas" },
           "401": { "description": "Não autorizado" }
         }
       }

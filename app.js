@@ -70,6 +70,4 @@ app.post('/login', userController.login);
 
 app.get('/pessoas', authenticateToken, pessoaController.getPessoas);
 
-app.get('/pessoas/:cpf', authenticateToken, pessoaController.getPessoaByCpf);
-
 module.exports = app;

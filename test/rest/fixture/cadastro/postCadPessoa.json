@@ -1,0 +1,10 @@
+{
+    "nome": "João",
+    "sobrenome": "Silva",
+    "cpf": "12345678900",
+    "dataNascimento": "1990-01-01",
+    "nomePai": "Carlos Silva",
+    "nomeMae": "Maria Silva",
+    "telefone": "11999999999",
+    "sexo": "M"
+  }

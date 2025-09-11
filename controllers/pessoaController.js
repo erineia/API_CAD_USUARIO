@@ -25,9 +25,3 @@ exports.register = (req, res) => {
 exports.getPessoas = (req, res) => {
   res.json(pessoaService.getAllPessoas());
 };
-
-exports.getPessoaByCpf = (req, res) => {
-  const pessoa = pessoaService.getPessoaByCpf(req.params.cpf);
-  if (!pessoa) return res.status(404).json({ error: 'Pessoa não encontrada' });
-  res.json(pessoa);
-};
