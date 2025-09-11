@@ -1,4 +1,5 @@
 const { pessoas } = require('../models/pessoaModel');
+const mensagens = require('../mensagensValidacao');
 
 function validatePessoa(data) {
   const nome = (data.nome || '').trim();
@@ -12,12 +13,11 @@ function validatePessoa(data) {
   ) {
     return {
       valid: false,
-      message:
-        'Nome e CPF são obrigatórios. CPF deve ser numérico, 11 dígitos, o valor "string", é invalido',
+      message: mensagens.MSG_VALIDACAO_CPF_NOME,
     };
   }
   if (pessoas.find((p) => p.cpf === data.cpf)) {
-    return { valid: false, message: 'CPF já cadastrado.' };
+    return { valid: false, message: mensagens.MSG_CPF_DUPLICADO };
   }
   return { valid: true };
 }
@@ -35,5 +35,6 @@ function getAllPessoas() {
 
 module.exports = {
   registerPessoa,
+  validatePessoa,
   getAllPessoas,
 };

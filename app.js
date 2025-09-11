@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const cors = require('cors');
+const mensagens = require('./mensagensValidacao');
 
 const app = express();
 
@@ -33,8 +34,8 @@ function authenticateToken(req, res, next) {
       now.getMinutes(),
     )}:${pad(now.getSeconds())}`;
     return res.status(401).json({
-      mensagemUsuario: 'Usuário não está autenticado.',
-      mensagemDesenvolvedor: 'Usuário não está autenticado.',
+      mensagemUsuario: mensagens.MSG_NAO_AUTENTICADO,
+      mensagemDesenvolvedor: mensagens.MSG_NAO_AUTENTICADO,
       categoria: 'ERRO',
       dataHora,
     });
