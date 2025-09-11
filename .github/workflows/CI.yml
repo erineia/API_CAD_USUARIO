@@ -22,6 +22,9 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
+      - name: Corrigir permissões dos binários
+        run: chmod +x node_modules/.bin/mocha
+
       - name: Executar testes controller
         run: npx mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome
 
