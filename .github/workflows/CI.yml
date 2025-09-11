@@ -9,21 +9,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout código
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configurar Node.js
+      - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
 
       - name: Instalar dependências
-        run: npm install
+        run: npm install --legacy-peer-deps
 
-      - name: Corrigir permissões dos binários
-        run: chmod +x node_modules/.bin/mocha
+      - name: Corrigir permissão do Mocha
+        run: chmod +x ./node_modules/.bin/mocha
+
+      - name: Rodar os testes de API via Controller
+        run: npm run test-rest-controller
+
+      - name: Subir a API Rest
+        run: npm run start-rest &
 
       - name: Esperar as APIs estarem Funcionando
         run: sleep 8
@@ -32,8 +37,5 @@ jobs:
         run: |
           echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
 
-      - name: Executar testes controller
-        run: npx mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome
-
-      - name: Executar testes external
-        run: npx mocha test/rest/external/**/*.test.js --timeout 10000 --reporter mochawesome
+      - name: Rodar os testes External de API Rest via HTTP
+        run: npm run test-rest-external
