@@ -25,6 +25,10 @@ jobs:
       - name: Corrigir permissões dos binários
         run: chmod +x node_modules/.bin/mocha
 
+      - name: Criar .env
+        run: |
+          echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
+
       - name: Executar testes controller
         run: npx mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome
 
