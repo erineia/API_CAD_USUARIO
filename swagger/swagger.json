@@ -1,0 +1,161 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Gerenciamento de Usuários",
+    "version": "1.0.0",
+    "description": "Documentação da API RESTful para cadastro, autenticação e consulta de usuários."
+  },
+  "servers": [
+    { "url": "http://localhost:5000" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Cria um novo usuário de autenticação",
+        "tags": ["Usuários"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["username", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário criado" },
+          "400": { "description": "Erro de validação" }
+        }
+      },
+      "get": {
+        "summary": "Lista todos os usuários (protegido)",
+        "tags": ["Usuários"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Lista de usuários" },
+          "401": { "description": "Não autorizado" }
+        }
+      }
+    },
+    "/pessoas": {
+      "post": {
+        "summary": "Cadastra uma nova pessoa",
+        "tags": ["Pessoas"],
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "sobrenome": { "type": "string" },
+                  "cpf": { "type": "string" },
+                  "dataNascimento": { "type": "string" },
+                  "nomePai": { "type": "string" },
+                  "nomeMae": { "type": "string" },
+                  "telefone": { "type": "string" },
+                  "sexo": { "type": "string" }
+                },
+                "required": ["nome", "cpf"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Pessoa cadastrada" },
+          "400": { "description": "Erro de validação" }
+        }
+      }
+    },
+    "/pessoas/{cpf}": {
+      "get": {
+        "summary": "Consulta pessoa por CPF (protegido)",
+        "tags": ["Pessoas"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "cpf",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Dados da pessoa" },
+          "404": { "description": "Pessoa não encontrada" },
+          "401": { "description": "Não autorizado" }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Autentica um usuário e retorna um token JWT",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["username", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário e senha inválidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "mensagemUsuario": { "type": "string" },
+                    "mensagemDesenvolvedor": { "type": "string" },
+                    "categoria": { "type": "string" },
+                    "dataHora": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
