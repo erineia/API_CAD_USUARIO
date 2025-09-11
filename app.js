@@ -12,6 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const userController = require('./controllers/userController');
+const pessoaController = require('./controllers/pessoaController');
 const jwt = require('jsonwebtoken');
 const SECRET = process.env.JWT_SECRET || 'segredo';
 
@@ -63,12 +64,12 @@ app.post('/users', userController.createAuthUser);
 
 app.get('/users', authenticateToken, userController.getAuthUsers);
 
-app.post('/pessoas', authenticateToken, userController.register);
+app.post('/pessoas', authenticateToken, pessoaController.register);
 
 app.post('/login', userController.login);
 
-app.get('/pessoas', authenticateToken, userController.getUsers);
+app.get('/pessoas', authenticateToken, pessoaController.getPessoas);
 
-app.get('/pessoas/:cpf', authenticateToken, userController.getUserByCpf);
+app.get('/pessoas/:cpf', authenticateToken, pessoaController.getPessoaByCpf);
 
 module.exports = app;
