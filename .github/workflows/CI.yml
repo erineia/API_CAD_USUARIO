@@ -31,7 +31,7 @@ jobs:
         run: npm run start-rest &
 
       - name: Esperar as APIs estarem Funcionando
-        run: sleep 8
+        run: run wait-on-api
 
       - name: Criar .env
         run: |
