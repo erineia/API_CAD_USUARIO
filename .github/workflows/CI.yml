@@ -25,6 +25,9 @@ jobs:
       - name: Corrigir permissões dos binários
         run: chmod +x node_modules/.bin/mocha
 
+      - name: Esperar as APIs estarem Funcionando
+        run: sleep 8
+
       - name: Criar .env
         run: |
           echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
