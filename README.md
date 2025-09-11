@@ -1,6 +1,6 @@
 # User Management API
 
-API RESTful para gerenciamento de usuários utilizando Node.js, Express, JWT e Swagger.
+API RESTful para gerenciamento de usuários e pessoas utilizando Node.js, Express, JWT e Swagger.
 
 ## Instalação
 
@@ -25,58 +25,35 @@ JWT_SECRET=seuSegredoAqui
 npm start
 ```
 
-A API estará disponível em `http://localhost:3000`.
+A API estará disponível em `http://localhost:5000`.
 
 ## Documentação Swagger
 
-Acesse `http://localhost:3000/api-docs` para visualizar e testar os endpoints via Swagger UI.
+Acesse `http://localhost:5000/api-docs` para visualizar e testar os endpoints via Swagger UI.
 
 ## Endpoints
 
-### POST /register
+### Usuários
 
-Cadastra um novo usuário.
+#### POST /users
+
+Cadastra um novo usuário para autenticação.
 
 **Body JSON:**
 
 ```
 {
-  "nome": "João",
-  "sobrenome": "Silva",
-  "cpf": "12345678900",
-  "dataNascimento": "1990-01-01",
-  "nomePai": "Carlos Silva",
-  "nomeMae": "Maria Silva",
-  "telefone": "11999999999",
-  "sexo": "M",
-  "senha": "minhaSenhaSegura"
+  "username": "usuario1",
+  "password": "senhaSegura"
 }
 ```
 
 **Respostas:**
 
-- 201: Usuário cadastrado
+- 201: Usuário criado
 - 400: Erro de validação
 
-### POST /login
-
-Autentica um usuário e retorna um token JWT.
-
-**Body JSON:**
-
-```
-{
-  "cpf": "12345678900",
-  "senha": "minhaSenhaSegura"
-}
-```
-
-**Respostas:**
-
-- 200: `{ "token": "..." }`
-- 401: CPF ou senha inválidos
-
-### GET /users
+#### GET /users
 
 Lista todos os usuários cadastrados (protegido por JWT).
 
@@ -91,9 +68,35 @@ Authorization: Bearer <token>
 - 200: Lista de usuários
 - 401: Não autorizado
 
-### GET /users/:cpf
+### Pessoas
 
-Consulta usuário por CPF (protegido por JWT).
+#### POST /pessoas
+
+Cadastra uma nova pessoa (protegido por JWT).
+
+**Body JSON:**
+
+```
+{
+  "nome": "João",
+  "sobrenome": "Silva",
+  "cpf": "12345678900",
+  "dataNascimento": "1990-01-01",
+  "nomePai": "Carlos Silva",
+  "nomeMae": "Maria Silva",
+  "telefone": "11999999999",
+  "sexo": "M"
+}
+```
+
+**Respostas:**
+
+- 201: Pessoa cadastrada
+- 400: Erro de validação
+
+#### GET /pessoas
+
+Lista todas as pessoas cadastradas (protegido por JWT).
 
 **Headers:**
 
@@ -103,9 +106,44 @@ Authorization: Bearer <token>
 
 **Respostas:**
 
-- 200: Dados do usuário
-- 404: Usuário não encontrado
+- 200: Lista de pessoas
 - 401: Não autorizado
+
+#### GET /pessoas/:cpf
+
+Consulta pessoa por CPF (protegido por JWT).
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Respostas:**
+
+- 200: Dados da pessoa
+- 404: Pessoa não encontrada
+- 401: Não autorizado
+
+### Autenticação
+
+#### POST /login
+
+Autentica um usuário e retorna um token JWT.
+
+**Body JSON:**
+
+```
+{
+  "username": "usuario1",
+  "password": "senhaSegura"
+}
+```
+
+**Respostas:**
+
+- 200: `{ "success": true, "token": "..." }`
+- 401: Usuário ou senha inválidos
 
 ## Exemplo de Autenticação
 
