@@ -1,16 +1,14 @@
 {
-  "query": "mutation RegisterPessoa($input: RegisterPessoaInput!) { registerPessoa(input: $input) { valid pessoa { cpf } message mensagemUsuario } }",
+  "query": "mutation RegisterPessoa($nome: String!, $sobrenome: String!, $cpf: String!, $dataNascimento: String!, $nomePai: String, $nomeMae: String, $telefone: String, $sexo: String) { registerPessoa(nome: $nome, sobrenome: $sobrenome, cpf: $cpf, dataNascimento: $dataNascimento, nomePai: $nomePai, nomeMae: $nomeMae, telefone: $telefone, sexo: $sexo) { valid pessoa { cpf } message mensagemUsuario } }",
   "variables": {
-    "input": {
-      "nome": "Neia",
-      "sobrenome": "Silva",
-      "cpf": "06739973679",
-      "dataNascimento": "24/09/1984",
-      "nomePai": "Jose",
-      "nomeMae": "Maria",
-      "telefone": "6199999999",
-      "sexo": "F"
-    }
+    "nome": "Neia",
+    "sobrenome": "Silva",
+    "cpf": "06739973679",
+    "dataNascimento": "24/09/1984",
+    "nomePai": "Jose",
+    "nomeMae": "Maria",
+    "telefone": "6199999999",
+    "sexo": "F"
   }
 }
 

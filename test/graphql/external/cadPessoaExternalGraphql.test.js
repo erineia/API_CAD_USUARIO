@@ -21,8 +21,8 @@ describe('Cad Pessoa - GraphQL External', () => {
 
   it('graphql: deve validar nome/CPF inválidos retornando mensagem de erro', async () => {
     const mutation = JSON.parse(JSON.stringify(postCadPessoa));
-    mutation.variables.input.nome = 'string';
-    mutation.variables.input.cpf = 'string';
+    mutation.variables.nome = 'string';
+    mutation.variables.cpf = 'string';
     const resposta = await request(process.env.BASE_URL_GRAPHQL)
       .post('/graphql')
       .set('Authorization', `Bearer ${token}`)
@@ -39,7 +39,7 @@ describe('Cad Pessoa - GraphQL External', () => {
     const cpfUnico = String(
       Math.floor(10000000000 + Math.random() * 89999999999),
     );
-    mutation.variables.input.cpf = cpfUnico;
+    mutation.variables.cpf = cpfUnico;
     const resposta = await request(process.env.BASE_URL_GRAPHQL)
       .post('/graphql')
       .set('Authorization', `Bearer ${token}`)

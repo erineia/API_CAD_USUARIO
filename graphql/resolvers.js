@@ -15,6 +15,7 @@ const resolvers = {
       if (!context.user) {
         return {
           valid: false,
+          pessoa: null,
           message: mensagens.MSG_USUARIO_NAO_AUTENTICADO,
           mensagemUsuario: mensagens.MSG_USUARIO_NAO_AUTENTICADO,
         };
@@ -23,6 +24,7 @@ const resolvers = {
       if (!result.valid) {
         return {
           valid: false,
+          pessoa: null,
           message: result.message,
           mensagemUsuario: result.message,
         };
@@ -42,14 +44,6 @@ const resolvers = {
       }
       throw new Error('Usuário ou senha inválidos');
     },
-    // async transfer(_, { valor, cpfOrigem, cpfDestino }, context) {
-    //   if (!context.user) {
-    //     return { success: false, message: 'Token JWT inválido ou ausente.' };
-    //   }
-    //   // Chame o serviço REST de transferência aqui
-    //   // Exemplo: await transferService.transfer(valor, cpfOrigem, cpfDestino);
-    //   return { success: true, message: 'Transferência realizada com sucesso.' };
-    // },
   },
 };
 
