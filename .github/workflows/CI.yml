@@ -1,10 +1,10 @@
-name: Node.js CI
+name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
         run: npm run start-rest &
 
       - name: Esperar as APIs estarem Funcionando
-        run: npm run wait-on-api
+        run: sleep 8
 
       - name: Criar .env
         run: |
