@@ -7,8 +7,9 @@ on:
     branches: [master]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,11 +19,8 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Instalar dependências
-        run: npm install --legacy-peer-deps
-
-      - name: Corrigir permissão do Mocha
-        run: chmod +x ./node_modules/.bin/mocha
+      - name: Install dependencies
+        run: npm install
 
       - name: Rodar os testes de API via Controller
         run: npm run test-rest-controller
@@ -39,3 +37,5 @@ jobs:
 
       - name: Rodar os testes External de API Rest via HTTP
         run: npm run test-rest-external
+
+
