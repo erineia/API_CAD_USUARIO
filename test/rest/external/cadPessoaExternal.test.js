@@ -48,12 +48,16 @@ describe('Cad Pessoa - External', () => {
   });
 
   it('external: deve validar CPF já cadastrado retornando 400', async () => {
+    await request(process.env.BASE_URL_REST)
+      .post('/pessoas')
+      .set('Authorization', `Bearer ${token}`)
+      .send(postCadPessoa);
+
     const resposta = await request(process.env.BASE_URL_REST)
       .post('/pessoas')
       .set('Authorization', `Bearer ${token}`)
       .send(postCadPessoa);
 
-    console.log(resposta.body);
     expect(resposta.status).to.equal(400);
     expect(resposta.body.mensagemUsuario).to.equal(mensagens.MSG_CPF_DUPLICADO);
   });
