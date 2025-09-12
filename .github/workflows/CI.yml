@@ -19,11 +19,11 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Instalar dependências
+        run: npm install --legacy-peer-deps
 
-      - name: Corrigir permissões dos binários
-        run: chmod +x node_modules/.bin/mocha
+      - name: Corrigir permissão do Mocha
+        run: chmod +x ./node_modules/.bin/mocha
 
       - name: Rodar os testes de API via Controller
         run: npm run test-rest-controller
