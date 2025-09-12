@@ -8,8 +8,8 @@ const mensagens = require('../../../mensagensValidacao');
 
 describe('Cad Pessoa - Controller', () => {
   let token;
-  const usuario = require('../fixture/requisicoes/login/postLogin.json');
-  const postCadPessoa = require('../fixture/requisicoes/cadastro/postCadPessoa.json');
+  const usuario = require('../../fixture/requisicoes/login/postLogin.json');
+  const postCadPessoa = require('../../fixture/requisicoes/cadastro/postCadPessoa.json');
 
   before(async () => {
     await request(app).post('/users').send(usuario);
@@ -17,7 +17,7 @@ describe('Cad Pessoa - Controller', () => {
     token = res.body.token || res.body.token;
   });
 
-  it('deve validar nome/CPF inválidos retornando 400', async () => {
+  it('Controller - deve validar nome/CPF inválidos retornando 400', async () => {
     const pessoaServiceMock = sinon.stub(pessoaService, 'validatePessoa');
     pessoaServiceMock.throws(mensagens.MSG_VALIDACAO_CPF_NOME);
 
@@ -32,7 +32,7 @@ describe('Cad Pessoa - Controller', () => {
     sinon.restore();
   });
 
-  it('deve cadastrar pessoa com sucesso retornando 201', async () => {
+  it('Controller - deve cadastrar pessoa com sucesso retornando 201', async () => {
     const pessoaServiceMock = sinon.stub(pessoaService, 'registerPessoa');
     pessoaServiceMock.returns({ valid: true, pessoa: postCadPessoa });
     const res = await request(app)
@@ -46,7 +46,7 @@ describe('Cad Pessoa - Controller', () => {
     sinon.restore();
   });
 
-  it('deve validar CPF já cadastrado retornando 400', async () => {
+  it('Controller - deve validar CPF já cadastrado retornando 400', async () => {
     const pessoaServiceMock = sinon.stub(pessoaService, 'registerPessoa');
     pessoaServiceMock.returns({
       valid: false,
@@ -62,7 +62,7 @@ describe('Cad Pessoa - Controller', () => {
     sinon.restore();
   });
 
-  it('deve validar a não autenticação retornando 401', async () => {
+  it('Controller - deve validar a não autenticação retornando 401', async () => {
     const res = await request(app).post('/pessoas').send(postCadPessoa);
     expect(res.status).to.equal(401);
     expect(res.body.mensagemUsuario).to.equal(

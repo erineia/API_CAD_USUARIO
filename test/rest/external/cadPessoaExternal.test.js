@@ -7,10 +7,10 @@ require('dotenv').config();
 
 describe('Cad Pessoa - External', () => {
   let token;
-  const postCadPessoa = require('../fixture/requisicoes/cadastro/postCadPessoaExternal.json');
+  const postCadPessoa = require('../../fixture/requisicoes/cadastro/postCadPessoaExternal.json');
 
   before(async () => {
-    const usuario = require('../fixture/requisicoes/login/postLogin.json');
+    const usuario = require('../../fixture/requisicoes/login/postLogin.json');
     await request(process.env.BASE_URL_REST).post('/users').send(usuario);
     const respostaLogin = await request(process.env.BASE_URL_REST)
       .post('/login')

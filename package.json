@@ -7,15 +7,19 @@
     "test": "mocha test/**/*.test.js --timeout 10000 --reporter mochawesome",
     "test-rest-controller": "mocha test/rest/controller/**/*.test.js --timeout 10000 --reporter mochawesome",
     "test-rest-external": "mocha test/rest/external/**/*.test.js --timeout 10000 --reporter mochawesome",
-    "start-rest": "node server.js"
+    "test-graphql-external": "mocha test/graphql/external/**/*.test.js --timeout 10000 --reporter mochawesome",
+    "start-rest": "node server.js",
+    "start-graphql": "node graphql/server.js"
   },
   "dependencies": {
+    "apollo-server-express": "^3.13.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "chai": "^6.0.1",
     "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
+    "express": "^4.21.2",
+    "graphql": "^16.11.0",
+    "jsonwebtoken": "^9.0.2",
     "mocha": "^11.7.2",
     "sinon": "^21.0.0",
     "supertest": "^7.1.4",

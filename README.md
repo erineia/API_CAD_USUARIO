@@ -1,6 +1,6 @@
 # User Management API
 
-API RESTful para gerenciamento de usuários e pessoas utilizando Node.js, Express, JWT e Swagger.
+API RESTful e GraphQL para gerenciamento de usuários e pessoas utilizando Node.js, Express, JWT, Swagger e ApolloServer.
 
 ## Instalação
 
@@ -25,11 +25,79 @@ JWT_SECRET=seuSegredoAqui
 npm start
 ```
 
-A API estará disponível em `http://localhost:5000`.
-
 ## Documentação Swagger
 
-Acesse `http://localhost:5000/api-docs` para visualizar e testar os endpoints via Swagger UI.
+## GraphQL
+
+### Endpoint
+
+O endpoint GraphQL está disponível em:
+
+```
+http://localhost:2000/graphql
+```
+
+### Autenticação
+
+Para acessar mutations e queries protegidas, envie o token JWT no header:
+
+```
+Authorization: Bearer <seuTokenJWT>
+```
+
+### Exemplo de Mutation
+
+Para cadastrar uma pessoa via GraphQL, utilize a mutation abaixo:
+
+```graphql
+mutation RegisterPessoa($input: RegisterPessoaInput!) {
+  registerPessoa(input: $input) {
+    valid
+    message
+    mensagemUsuario
+    pessoa {
+      nome
+      sobrenome
+      cpf
+      dataNascimento
+      nomePai
+      nomeMae
+      telefone
+      sexo
+    }
+  }
+}
+```
+
+**Exemplo de JSON para variável `$input`:**
+
+```json
+{
+  "input": {
+    "nome": "João",
+    "sobrenome": "Silva",
+    "cpf": "12345678900",
+    "dataNascimento": "1990-01-01",
+    "nomePai": "Carlos Silva",
+    "nomeMae": "Maria Silva",
+    "telefone": "11999999999",
+    "sexo": "M"
+  }
+}
+```
+
+### Regras de uso
+
+- Todas as operações protegidas exigem JWT no header.
+- Os erros e mensagens de validação são retornados nos campos `message` e `mensagemUsuario` dentro do objeto da mutation.
+- O status HTTP será sempre 200, mesmo em caso de erro de negócio ou validação. Valide o resultado pelos campos do body.
+- Para testar via Postman, Insomnia ou playground GraphQL, envie o token JWT e as variáveis conforme exemplo acima.
+
+### Testes automatizados
+
+Os testes GraphQL estão em `test/graphql/external/cadPessoaExternalGraphql.test.js` e usam fixtures JSON para facilitar a manutenção dos payloads.
+
+Acesse `http://localhost:2000/api-docs` para visualizar e testar os endpoints via Swagger UI.
 
 ## Endpoints
 
@@ -48,9 +116,6 @@ Cadastra um novo usuário para autenticação.
 }
 ```
 
-**Respostas:**
-
-- 201: Usuário criado
 - 400: Erro de validação
 
 #### GET /users
@@ -153,7 +218,5 @@ Autentica um usuário e retorna um token JWT.
 ```
 Authorization: Bearer seuTokenAqui
 ```
-
----
 
 Qualquer dúvida, consulte a documentação Swagger ou o código fonte.
