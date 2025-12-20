@@ -29,7 +29,7 @@ Este diretório contém exemplos e utilitários para testes de performance com K
 ### Thresholds
 
 Regras para validar limites de performance (ex: tempo de resposta).
-Definidas em `options` nos arquivos de teste, ex:
+Definidas em `options` nos arquivos de teste, ex: (`CadPessoa.test.js`)
 
 ```js
 export let options = {
@@ -44,7 +44,7 @@ export let options = {
 ### Checks
 
 Validações automáticas das respostas HTTP.
-Exemplo em `CadPessoa.test.js`:
+Exemplo em (`CadPessoa.test.js`):
 
 ```js
 check(res, { 'registro status 201': (r) => r.status === 201 });
@@ -62,7 +62,7 @@ Localizadas em `test/k6/helpers/` (ex: `getBaseUrl.js`, `generateCpf.js`, `rando
 ### Trends
 
 Métricas customizadas para monitorar tempos de resposta.
-Exemplo em `CadPessoa.test.js`:
+Exemplo em (`CadPessoa.test.js`)
 
 ```js
 import { Trend } from 'k6/metrics';
@@ -75,7 +75,7 @@ No grupo `Cadastrar pessoa`, o tempo de cada requisição ao endpoint `/pessoas`
 ### Faker
 
 Geração de dados aleatórios para os testes.
-Usado via:
+Usado via: (`PessoaFactoy.js`)
 
 ```js
 import { Faker } from 'k6/x/faker';
@@ -99,7 +99,7 @@ export function getBaseUrl() {
 }
 ```
 
-Exemplo de uso em `CadPessoa.test.js`:
+Uso em (`CadPessoa.test.js`):
 
 ```js
 const BASE_URL = getBaseUrl();
@@ -110,8 +110,7 @@ http.post(`${BASE_URL}/pessoas`, ...);
 
 ### Stages
 
-Define ramp-up, duração e ramp-down dos usuários virtuais.
-Exemplo:
+Define ramp-up, duração e ramp-down dos usuários virtuais. Esta sendo utilizado em (`CadPessoa.test.js`):
 
 ```js
 stages: [
@@ -124,7 +123,7 @@ stages: [
 ### Reaproveitamento de Resposta
 
 Utiliza dados de uma requisição em outra, dentro do mesmo fluxo de teste.
-Exemplo: o token do login é usado para autenticar o cadastro de pessoa.
+Exemplo: o token do login é usado para autenticar o cadastro de pessoa. (`CadPessoa.test.js`)
 
 ```js
 let token = '';
@@ -135,10 +134,19 @@ Authorization: `Bearer ${token}`;
 ### Uso de Token de Autenticação
 
 Utilização de JWT para acessar rotas protegidas.
-Exemplo:
+Exemplo: (`CadPessoa.test.js`)
 
 ```js
-Authorization: `Bearer ${token}`;
+  group('Cadastrar pessoa', function () {
+    const pessoa = buildPessoa();
+
+    const res = http.post(`${BASE_URL}/pessoas`, JSON.stringify(pessoa), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      tags: { name: 'CadastrarPessoa' },
+    });
 ```
 
 ### Data-Driven Testing
@@ -163,7 +171,7 @@ export default function () {
 ### Groups
 
 Organiza o teste em blocos para melhor leitura.
-Exemplo:
+Exemplo: (`CadPessoa.test.js`)
 
 ```js
 group('Registrar usuário', function () { ... });
