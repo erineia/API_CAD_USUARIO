@@ -1,105 +1,180 @@
+# Sobre a API
+
+Esta API gerencia usuários e pessoas, oferecendo endpoints RESTful e GraphQL. Foi construída com Node.js, Express, autenticação JWT e possui documentação Swagger.
+
+**Principais funcionalidades:**
+
+- **Cadastro de Usuário:** `POST /users` — Cria um novo usuário (username e password).
+- **Login:** `POST /login` — Autentica e retorna um token JWT.
+- **Cadastro de Pessoa:** `POST /pessoas` — Cadastra uma pessoa (requer JWT).
+- **Consulta de Pessoas:** `GET /pessoas` — Lista pessoas cadastradas (requer JWT).
+- **Listagem de Usuários:** `GET /users` — Lista todos os usuários (requer JWT).
+- **GraphQL:** Endpoint `/graphql` para operações avançadas (requer JWT).
+
+**Autenticação:**
+Após o login, envie o token JWT no header:
+`Authorization: Bearer <token>`
+
+**Documentação:**
+
+- REST: Swagger disponível em `/api-docs`
+- GraphQL: Playground em `/graphql`
+
 # Documentação dos Testes K6
 
-Este diretório contém exemplos e utilitários para testes de performance e data-driven usando K6 e xk6-faker.
+Este diretório contém exemplos e utilitários para testes de performance com K6.
 
-## Conceitos e Onde Estão no Código
+## Conceitos
 
 ### Thresholds
 
-- **O que é:** Regras para validar limites de performance (ex: tempo de resposta).
-- **Onde está:**
-  - Definido em `options` nos arquivos de teste, ex: `CadPessoa.test.js`, `loginDataDriven.test.js`.
-  - Exemplo:
-    ```js
-    export let options = {
-      thresholds: {
-        http_req_duration: ['p(95)<=2000'],
-      },
-    };
-    ```
+Regras para validar limites de performance (ex: tempo de resposta).
+Definidas em `options` nos arquivos de teste, ex:
+
+```js
+export let options = {
+  thresholds: {
+    http_req_duration: ['p(95)<=2000', 'p(99)<=2000'],
+    http_req_failed: ['rate<0.99'],
+    pessoas_req_duration: ['p(95)<=2000'],
+  },
+};
+```
 
 ### Checks
 
-- **O que é:** Validações automáticas sobre as respostas HTTP.
-- **Onde está:**
-  - Usado em todos os testes, ex: `CadPessoa.test.js`, `loginDataDriven.test.js`.
-  - Exemplo:
-    ```js
-    check(res, { 'login status 200': (r) => r.status === 200 });
-    ```
+Validações automáticas das respostas HTTP.
+Exemplo em `CadPessoa.test.js`:
+
+```js
+check(res, { 'registro status 201': (r) => r.status === 201 });
+check(res, {
+  'login status 200': (r) => r.status === 200,
+  'token recebido': (r) => r.json('token') !== undefined,
+});
+```
 
 ### Helpers
 
-- **O que é:** Funções utilitárias para reaproveitamento de lógica.
-- **Onde está:**
-  - Pasta `test/k6/helpers/` (ex: `getBaseUrl.js`, `generateCpf.js`, `randomUtils.js`).
+Funções utilitárias para reaproveitar lógica.
+Localizadas em `test/k6/helpers/` (ex: `getBaseUrl.js`, `generateCpf.js`, `randomUtils.js`).
 
 ### Trends
 
-- **O que é:** Métricas customizadas para monitorar tempos de resposta específicos.
-- **Onde está:**
-  - Definido em `CadPessoa.test.js`:
-    ```js
-    import { Trend } from 'k6/metrics';
-    const pessoasTrend = new Trend('pessoas_req_duration');
-    pessoasTrend.add(res.timings.duration);
-    ```
+Métricas customizadas para monitorar tempos de resposta.
+Exemplo em `CadPessoa.test.js`:
+
+```js
+import { Trend } from 'k6/metrics';
+const pessoasTrend = new Trend('pessoas_req_duration');
+pessoasTrend.add(res.timings.duration);
+```
+
+No grupo `Cadastrar pessoa`, o tempo de cada requisição ao endpoint `/pessoas` é registrado.
 
 ### Faker
 
-- **O que é:** Geração de dados aleatórios para os testes.
-- **Onde está:**
-  - Usado via `import faker from 'k6/x/faker'` em `PessoaFactory.js` e `CadPessoa.test.js`.
+Geração de dados aleatórios para os testes.
+Usado via:
+
+```js
+import { Faker } from 'k6/x/faker';
+const fakeGen = new Faker();
+return {
+  nome: fakeGen.person.firstName(),
+  sobrenome: fakeGen.person.lastName(),
+  nomePai: fakeGen.person.firstName(),
+  nomeMae: fakeGen.person.firstName(),
+};
+```
 
 ### Variável de Ambiente
 
-- **O que é:** Permite configurar a base da API sem alterar o código.
-- **Onde está:**
-  - Usado em `getBaseUrl.js` e passado via `--env BASE_URL=...` na execução do k6.
+Permite configurar a base da API sem alterar o código.
+Configurada em `getBaseUrl.js` e passada via `--env BASE_URL=...` na execução do k6.
+
+```js
+export function getBaseUrl() {
+  return __ENV.BASE_URL || 'http://localhost:5000';
+}
+```
+
+Exemplo de uso em `CadPessoa.test.js`:
+
+```js
+const BASE_URL = getBaseUrl();
+http.post(`${BASE_URL}/users`, ...);
+http.post(`${BASE_URL}/login`, ...);
+http.post(`${BASE_URL}/pessoas`, ...);
+```
 
 ### Stages
 
-- **O que é:** Define ramp-up, duração e ramp-down dos usuários virtuais.
-- **Onde está:**
-  - Definido em `options` dos testes de performance, ex: `CadPessoa.test.js`.
-    ```js
-    stages: [
-      { duration: '3s', target: 10 },
-      { duration: '15s', target: 10 },
-      { duration: '5s', target: 0 },
-    ],
-    ```
+Define ramp-up, duração e ramp-down dos usuários virtuais.
+Exemplo:
+
+```js
+stages: [
+  { duration: '3s', target: 10 },
+  { duration: '15s', target: 10 },
+  { duration: '5s', target: 0 },
+],
+```
 
 ### Reaproveitamento de Resposta
 
-- **O que é:** Uso de dados de uma resposta em requisições seguintes.
-- **Onde está:**
-  - Exemplo em `CadPessoa.test.js`, onde o token do login é usado para autenticar o cadastro de pessoa.
+Utiliza dados de uma requisição em outra, dentro do mesmo fluxo de teste.
+Exemplo: o token do login é usado para autenticar o cadastro de pessoa.
+
+```js
+let token = '';
+token = res.json('token');
+Authorization: `Bearer ${token}`;
+```
 
 ### Uso de Token de Autenticação
 
-- **O que é:** Utilização de JWT ou outro token para acessar rotas protegidas.
-- **Onde está:**
-  - Exemplo em `CadPessoa.test.js`:
-    ```js
-    Authorization: `Bearer ${token}`;
-    ```
+Utilização de JWT para acessar rotas protegidas.
+Exemplo:
+
+```js
+Authorization: `Bearer ${token}`;
+```
 
 ### Data-Driven Testing
 
-- **O que é:** Execução de testes com múltiplos conjuntos de dados externos.
-- **Onde está:**
-  - Exemplo em `loginDataDriven.test.js` usando o arquivo `data/LoginDataDriven.data.json`.
+Execução de testes com múltiplos conjuntos de dados externos.
+Exemplo em `loginDataDriven.test.js` usando `data/LoginDataDriven.data.json`:
+
+```js
+const loginData = JSON.parse(open('data/LoginDataDriven.data.json'));
+export default function () {
+  const user = loginData[__ITER % loginData.length];
+  registrarUsuario(user.username, user.password);
+  const BASE_URL = getBaseUrl();
+  const url = `${BASE_URL}/login`;
+  const payload = JSON.stringify({
+    username: user.username,
+    password: user.password,
+  });
+}
+```
 
 ### Groups
 
-- **O que é:** Organização do teste em blocos lógicos para melhor leitura e relatórios.
-- **Onde está:**
-  - Usado em `CadPessoa.test.js`:
-    ```js
-    group('Registrar usuário', function () { ... });
-    ```
+Organiza o teste em blocos para melhor leitura.
+Exemplo:
+
+```js
+group('Registrar usuário', function () { ... });
+```
+
+## Comando utiliazdos para execução dos testes em k6
+
+```bash
+k6 run test/k6/loginDataDriven.test.js
+k6 run test/k6/CadPessoa.test.js
+K6_WEB_DASHBOARD=true K6_WEB_DASHBOARD_EXPORT=html-report.html k6 run test/k6/CadPessoa.test.js
+```
 
 ---
-
-Consulte os arquivos dentro de `test/k6` para exemplos práticos de cada conceito.

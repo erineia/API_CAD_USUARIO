@@ -1,21 +1,29 @@
+import { Faker } from 'k6/x/faker';
 import { generateCpf } from '../helpers/generateCpf.js';
 import {
-  randomNome,
-  randomSobrenome,
+  randomAnoNascimento,
+  randomDia,
+  randomIdade,
+  randomMes,
+  randomNumber,
   randomSexo,
-  randomTelefone,
-  randomDataNascimento,
 } from '../helpers/randomUtils.js';
 
+const fakeGen = new Faker();
+
 export function buildPessoa() {
+  const idade = randomIdade();
+  const anoNascimento = randomAnoNascimento(idade);
+  const mes = randomMes();
+  const dia = randomDia();
   return {
-    nome: randomNome(),
-    sobrenome: randomSobrenome(),
+    nome: fakeGen.person.firstName(),
+    sobrenome: fakeGen.person.lastName(),
     cpf: generateCpf(),
-    dataNascimento: randomDataNascimento(),
-    nomePai: randomNome(),
-    nomeMae: randomNome(),
-    telefone: randomTelefone(),
+    dataNascimento: `${anoNascimento}-${mes}-${dia}`,
+    nomePai: fakeGen.person.firstName(),
+    nomeMae: fakeGen.person.firstName(),
+    telefone: `9${randomNumber(9)}`,
     sexo: randomSexo(),
   };
 }
